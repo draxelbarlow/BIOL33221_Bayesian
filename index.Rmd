@@ -2,7 +2,7 @@
 title       : "Bayesian phylogenetics"
 subtitle    : "BIOL33221: Bioinformatics"
 author      : Dr Axel Barlow
-job         : "email: axel.barlow@ntu.ac.uk, office: IBRC115"
+job         : "email: axel.barlow@ntu.ac.uk"
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : zenburn      # {zenburn, tomorrow, solarized-dark, ...}

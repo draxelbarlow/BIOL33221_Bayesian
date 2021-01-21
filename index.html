@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bayesian phylogenetics</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Bayesian phylogenetics">
+  <meta name="author" content="Dr Axel Barlow">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/custom.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    
+  <slide class="nobackground">
+    <article class="flexbox vcenter">
+      <span>
+        <img width='300px' src="assets/img/NTU_open-graph.png">
+      </span>
+    </article>
+  </slide>
+    <slide class="title-slide segue nobackground">
+  
+  <aside class="gdbar">
+    <img src="assets/img/ntu-shield.png">
+  </aside>
+  
+  <hgroup class="auto-fadein">
+    <h1>Bayesian phylogenetics</h1>
+    <h2>BIOL33221: Bioinformatics</h2>
+    <p>Dr Axel Barlow<br/>email: axel.barlow@ntu.ac.uk, office: IBRC115</p>
+  </hgroup>
+  
+  <article></article>  
+      
+  <footer class = 'license'>
+    <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>
+    <img width = '80px' src = 'http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png'>
+    </a>
+  </footer>
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <article data-timings="">
+    <!-- adding bold and italic options -->
+
+<style>
+em {
+  font-style: italic
+}
+strong {
+  font-weight: bold;
+}
+</style>
+
+<h2>Bayesian phylogenetics</h2>
+
+<ul>
+<li>Bayesian statistics</li>
+<li>Phylogenetic models</li>
+<li>Prior and posterior distributions</li>
+<li>MCMC sampling</li>
+<li>Interpreting results</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-2">
+<hgroup>
+  <h2>Introductory video 1</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><a href="https://www.youtube.com/watch?v=IqMzYTOf6H0&amp;ab_channel=DataCamp">https://www.youtube.com/watch?v=IqMzYTOf6H0&amp;ab_channel=DataCamp</a></p>
+
+</article>
+<!-- Presenter Notes -->
+
+</slide>
+<slide class="" id="slide-3">
+<hgroup>
+  <h2>Introductory video 2</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><a href="https://www.youtube.com/watch?v=FmzgKXV53-w&amp;ab_channel=DataCamp">https://www.youtube.com/watch?v=FmzgKXV53-w&amp;ab_channel=DataCamp</a></p>
+
+</article>
+<!-- Presenter Notes -->
+
+</slide>
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>The key points</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Bayesian statistics provide a way of describing our prior knowledge of a system as a probability</li>
+<li>We can then update this <code>prior probability</code> by observing some data</li>
+<li>The updated probability is called the <code>posterior probability</code></li>
+<li>Prior and posterior probabilities can also take the form of <code>probability distributions</code></li>
+<li>These allow us to describe a range of probabilites for different values</li>
+<li>More flexible than a single fixed probability value</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-5" style="background:white;">
+  
+  <hgroup>
+    <h2>Probability distributions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Imagine you want to predict the number of patients arriving at a hospital in the next week</li>
+<li>You have information from previous weeks that allow you to make an estimate</li>
+<li><strong>But on the Monday...</strong></li>
+</ul>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="assets/fig/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-6" style="background:white;">
+  
+  <hgroup>
+    <h2>Probability distributions</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Imagine you want to predict the number of patients arriving at a hospital in the next week</li>
+<li>You have information from previous weeks that allow you to make an estimate</li>
+<li><strong>But on the Monday, more patients arrive that you were expecting!</strong></li>
+</ul>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="assets/fig/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="segue dark" id="slide-7" style="background:;">
+  
+  <hgroup>
+    <h2>How does this work with phylogenetics?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>Bayesian phylogenetic analysis</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>The phylogeny is the evolutionary history of the sequences</li>
+<li>We need a <code>model</code> of how the sequences evolve</li>
+<li>The model has <code>parameters</code> that we can assign prior probabilites to</li>
+<li>The tree <code>topology</code>, for example, is a parameter</li>
+<li>We can then observe some data, in the form of a <code>sequence alignment</code></li>
+<li>And calculate the <code>posterior probabilities</code> of our model parameters</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>An example phylogenetic model</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th>Parameter</th>
+<th>Prior</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Substitution rate</td>
+<td>estimated rate</td>
+</tr>
+<tr>
+<td>Tr/Tv ratio</td>
+<td>estimated ratio</td>
+</tr>
+<tr>
+<td>Base frequencies</td>
+<td>estimated frequencies A,T,G,C</td>
+</tr>
+<tr>
+<td>Topology</td>
+<td>A set of tree topologies</td>
+</tr>
+<tr>
+<td>Branch lengths</td>
+<td>A set of branch lengths</td>
+</tr>
+<tr>
+<td>Population size</td>
+<td>A number of individuals</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="segue dark" id="slide-10" style="background:;">
+  
+  <hgroup>
+    <h2>Can you compute all those possibilities?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>Example: tree topology</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>We would like to calculate posterior probabilities for all possible tree topologies</li>
+<li>Then select the ones with highest probability</li>
+</ul>
+
+<ul class = "build incremental">
+<li><p>How many rooted tree topologies are there?</p>
+
+<ul>
+<li>3 sequences = 3 trees</li>
+<li>4 sequences = 15 trees</li>
+<li>5 sequences = 105 trees</li>
+<li>10 sequences = 34,459,425 trees</li>
+<li>53 sequences = 2.7E+80 (&gt; total atoms in universe)</li>
+</ul></li>
+<li><p><strong>Computing all possible topologies for modest number of sequences is computationally impossible</strong></p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  
+  <hgroup>
+    <h2>Markov chain Monte Carlo (MCMC) sampling</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ol>
+<li>Start at a tree</li>
+<li>Jump to a nearby tree</li>
+<li>Compare posterior probabilities</li>
+<li>New tree &gt; previous tree
+
+<ul>
+<li>accept</li>
+</ul></li>
+<li>New tree &lt; previous tree
+
+<ul>
+<li>accept proportional to difference</li>
+</ul></li>
+<li>Repeat (x millions)</li>
+</ol>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="./assets/img/uni_trees.svg" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="100%" style="display: block; margin: auto auto auto 0;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>MCMC sampling in practise</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul class = "build incremental">
+<li>The initial moves are likely to have low probability</li>
+<li>This is called <code>burn in</code></li>
+<li>We rapidly move to a set of parameter values with similarly high probability</li>
+<li>This is called <code>convergence</code> or <code>stationarity</code></li>
+<li>Sampling the chain at convergence approximates the true posterior distribution</li>
+<li>This is called the <code>posterior sample</code></li>
+<li>Since the MCMC steps are not independent, we take 1,000s between every sample</li>
+<li>And we can verify sufficient sampling using the <code>effective sample size</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-14" style="background:white;">
+  
+  <hgroup>
+    <h2>MCMC sampling in practise</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Graphically it looks like this</p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="assets/fig/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="assets/fig/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="100%" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="segue dark" id="slide-15" style="background:;">
+  
+  <hgroup>
+    <h2>But aren&#39;t we also collecting thousands of trees?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="" id="slide-16" style="background:white;">
+  
+  <hgroup>
+    <h2>Summarising the posterior sample of trees</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="./assets/img/panda.svg" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="95%" style="display: block; margin: auto auto auto 0;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <ul>
+<li>The <em>actual</em> result of the analysis is thousands of trees</li>
+<li>Typically pick one good one, and annotate with clade posterior probabilities</li>
+<li>Other parameters like branch lengths are averaged across posterior sample</li>
+</ul>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>Bayesian phylogenetics</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>Bayesian statistics</li>
+<li>Phylogenetic models</li>
+<li>Prior and posterior distributions</li>
+<li>MCMC sampling</li>
+<li>Interpreting results</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="thank-you-slide segue nobackground" id="slide-18">
+  <aside class="gdbar right"><img src="assets/img/ntu-shield.png"></aside>
+  <article class="flexbox vleft auto-fadein">
+    <h2>Next time</h2>
+    <p><strong>Molecular dating</strong></p>
+
+  </article>
+
+  <p class="auto-fadein" data-config-contact="">
+    
+  </p>
+</slide>
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Introductory video 1'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Introductory video 2'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='The key points'>
+         4
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Probability distributions'>
+         5
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Probability distributions'>
+         6
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='How does this work with phylogenetics?'>
+         7
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Bayesian phylogenetic analysis'>
+         8
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='An example phylogenetic model'>
+         9
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Can you compute all those possibilities?'>
+         10
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Example: tree topology'>
+         11
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Markov chain Monte Carlo (MCMC) sampling'>
+         12
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='MCMC sampling in practise'>
+         13
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='MCMC sampling in practise'>
+         14
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='But aren&#39;t we also collecting thousands of trees?'>
+         15
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Summarising the posterior sample of trees'>
+         16
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Bayesian phylogenetics'>
+         17
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Next time'>
+         18
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

@@ -1,0 +1,30 @@
+.title-slide {
+  background-color: #FFFFFF;
+  /* background-color: #CBE7A5; #EDE0CF; ; #CA9F9D*/
+  /* background-image:url(http://goo.gl/EpXln); */
+}
+
+aside.gdbar img {
+  width: 71px;
+  height: 85px;
+  position: absolute;
+  right: 0;
+  margin: 8px 15px;
+}
+
+.title-slide hgroup > h1,
+.title-slide hgroup > h2 {
+  color: darkslategray; /*#535E43 ;  /* ; #EF5150*/
+}
+
+.thank-you-slide {
+background: #FFFFFF !important;
+color: darkslategray;
+}
+
+/* line 58, ../scss/default.scss */
+::selection {
+  color: white;
+  background-color: #00289e; /*#ffd14d;*/
+  text-shadow: none;
+}

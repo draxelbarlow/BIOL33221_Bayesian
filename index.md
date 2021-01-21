@@ -13,6 +13,12 @@ logo        : ntu-shield.png
 biglogo     : NTU_open-graph.png
 assets      : {assets: ../../assets}
 license     : by-nc-sa
+github:
+  user: draxelbarlow
+  repo: BIOL33221_Bayesian
+  branch: "gh-pages"
+
+
 ---
 
 
